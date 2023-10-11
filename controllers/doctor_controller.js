@@ -1,6 +1,11 @@
 const bcrypt = require('bcrypt');
 
 const Doctor = require('../models/doctor');
+const jwt = require('jsonwebtoken');
+
+const generateToken = (id) => {
+    return jwt.sign( {id}, process.env.JWT_SECRET, {expiresIn : "30d"})
+}
 
 module.exports.register = async function(req, res) {
     if(!req.body || !req.body.username || !req.body.password) {
@@ -37,8 +42,9 @@ module.exports.login = async function (req, res) {
     let result = await bcrypt.compare(req.body.password, doctor.password);
     if(result) {
         return res.status(200).json({
-            _id: doctor.id,
-            username: doctor.username
+            _id: doctor._id,
+            username: doctor.username,
+            token: generateToken(doctor._id)
         });
     } else {
         return res.json({
