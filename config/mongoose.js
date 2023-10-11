@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-mongoose.connect('mongodb://localhost/');
+mongoose.connect('mongodb://localhost/hospital-db');
 const db = mongoose.connection;
 
 db.on('error', function(err) {console.log(err)});
